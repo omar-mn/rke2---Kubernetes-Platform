@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+  namespace: mates-app
+  labels:
+    service: front
+spec:
+  selector:
+    service: front
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-dep
+  namespace: mates-app
+  labels:
+    service: front
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: front
+  template:
+    metadata:
+      labels:
+        service: front
+    spec:
+      imagePulSecrets:
+        - name: dockerhub-secret
+      containers:
+      - name: front-pod
+        image: 3omar0/mates-front:v0.1.0
+        ports:
+        - containerPort: 80

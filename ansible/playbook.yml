@@ -1,0 +1,5 @@
+- name:   setup-rke2-HA
+  hosts:  all
+  remote_user: root
+  roles:
+    -  rke2-mosalam

@@ -1,0 +1,55 @@
+# /var/lib/rancher/rke2/server/manifests/rke2-cilium-config.yaml
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-cilium
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    kubeProxyReplacement: true
+    gatewayAPI:
+      enabled: false
+
+    k8sServiceHost: 172.16.0.4
+    k8sServicePort: 6443
+    routingMode: native
+    autoDirectNodeRoutes: true
+    ipv4NativeRoutingCIDR: 10.42.0.0/16
+    ipam:
+      mode: cluster-pool
+      operator:
+        clusterPoolIPv4PodCIDRList:
+          - 10.42.0.0/16
+        clusterPoolIPv4MaskSize: 22
+
+    MTU: 1400
+    ipv4:
+      enabled: true
+    ipv6:
+      enabled: false
+
+    enableIPv4Masquerade: true
+    devices:
+      - eth0
+      - eth1
+      - eth2
+    nodePort:
+      directRoutingDevice: eth2
+
+    loadBalancer:
+      mode: snat
+
+    l2announcements:
+      enabled: true
+      leaseDuration: 15s
+      leaseRenewDeadline: 5s
+      leaseRetryPeriod: 2s
+
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+        baseUrl: "/kube/hubble/"

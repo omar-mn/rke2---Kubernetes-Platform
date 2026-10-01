@@ -1,0 +1,30 @@
+conf:
+  - host_name: kirito
+    src: ../../files/rke2-1.yaml
+    dest: /etc/rancher/rke2/config.yaml
+
+  - host_name: kirito
+    src: ../../files/kube-vip.yaml
+    dest: /var/lib/rancher/rke2/server/manifests/kube-vip.yaml 
+
+  - host_name: kirito
+    src: ../../files/cilium.yaml
+    dest: /var/lib/rancher/rke2/server/manifests/rke2-cilium-config.yaml 
+
+  - host_name: kirito
+    src: ../../files/cilium-ip-ipam.yaml
+    dest: /var/lib/rancher/rke2/server/manifests/cilium-ip-ipam.yaml
+
+  - host_name: kirito
+    src: ../../files/rbac.yaml
+    dest: /var/lib/rancher/rke2/server/manifests/rbac.yaml
+
+  - host_name: rke2-2
+    src: ../../files/rke2-2.yaml
+    dest: /etc/rancher/rke2/config.yaml
+
+  - host_name: rke2-3
+    src: ../../files/rke2-3.yaml
+    dest: /etc/rancher/rke2/config.yaml
+
+

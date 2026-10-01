@@ -1,0 +1,11 @@
+[all]
+root@rke2-1
+root@rke2-2
+root@rke2-3
+
+[init]
+root@rke2-1
+
+[servers]
+root@rke2-2
+root@rke2-3

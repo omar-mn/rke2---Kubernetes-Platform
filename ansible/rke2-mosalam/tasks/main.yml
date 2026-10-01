@@ -1,0 +1,32 @@
+
+- name: rke2 config dir
+  file:
+    state: directory
+    path: /etc/rancher/rke2
+
+- name: rke2 manifests dir
+  file:
+    state: directory
+    path: /var/lib/rancher/rke2/server/manifests/
+
+- name: conf files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  when: ansible_facts['hostname'] == item.host_name
+  loop: "{{ conf }}"
+
+- name: install rke2
+  shell:
+    cmd: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server INSTALL_RKE2_VERSION="v1.35.5+rke2r2" sh -
+
+#- name: start rke2-server
+ # systemd_service:
+ #   state: started
+ #   name: rke2-server
+ #   enabled: true
+
+#- name: kubectl-conf
+#  shell:
+#    cmd: mkdir -p ~/.kube && cp /etc/rancher/rke2/rke2.yaml ~/.kube/config && chmod 600 ~/.kube/config && echo 'export PATH=$PATH:/var/lib/rancher/rke2/bin' >> ~/.bashrc && echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc
+

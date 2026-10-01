@@ -1,0 +1,40 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: kube-gw
+  namespace: kube-system
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: web
+    allowedRoutes:
+        namespaces:
+          from: Same
+
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kube-route
+  namespace: kube-system
+
+spec:
+
+  parentRefs:
+  - name: kube-gw
+
+  hostnames:
+    - hubble.kube.local
+
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+      backendRefs:
+        - name: hubble-ui
+          port: 80

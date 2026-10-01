@@ -1,0 +1,66 @@
+name: backend-ci-dev
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - "backend/src/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+
+    env:
+      SECRET_KEY: test-secret-key
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      DB_HOST: localhost
+      DB_PORT: 5432
+
+    steps:
+      - name: cheackout
+        uses: actions/checkout@v4.2.2
+
+      - name: reqs install
+        run:  pip install -r backend/requirements/requirements.dev.txt
+
+      - name: run tests
+        run: cd backend/src/ && pytest
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Set image tag
+        run: echo "IMAGE_TAG=dev-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend/.
+          push: true
+          tags: 3omar0/mates:${{ env.IMAGE_TAG }}
+
+
+

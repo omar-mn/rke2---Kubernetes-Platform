@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mates
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/omar-mn/mates-config.git
+    targetRevision: HEAD
+    path: .
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mates-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

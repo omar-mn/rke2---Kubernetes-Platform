@@ -1,0 +1,35 @@
+
+# /var/lib/rancher/rke2/server/manifests/rke2-traefik-config.yaml 
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    service:
+      enabled: true
+      type: LoadBalancer
+      ExternalTrafficPolicy: Cluster
+
+    providers:
+      kubernetesIngress:
+        enabled: false
+      kubernetesGateway:
+        enabled: true
+
+    ports:
+      traefik:
+        port: 8000
+      web:
+        asDefault:
+        port: 80
+      websecure:
+        port: 443
+        http:
+          tls:
+            enabled: true
+
+    gateway:
+      enabled: true

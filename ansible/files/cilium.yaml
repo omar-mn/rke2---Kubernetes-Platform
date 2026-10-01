@@ -1,0 +1,44 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-cilium
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    kubeProxyReplacement: true
+
+    k8sServiceHost: 172.16.4.100
+    k8sServicePort: 6443
+
+    routingMode: native
+    autoDirectNodeRoutes: true
+    ipv4NativeRoutingCIDR: 10.42.0.0/16
+    ipam:
+      mode: cluster-pool
+      operator:
+        clusterPoolIPv4PodCIDRList:
+          - 10.42.0.0/16
+        clusterPoolIPv4MaskSize: 22
+
+    MTU: 1400
+    ipv4:
+      enabled: true
+    ipv6:
+      enabled: false
+
+    enableIPv4Masquerade: true
+    devices:
+      - eth0
+      - eth1
+      - eth2
+    nodePort:
+      directRoutingDevice: eth2
+
+    loadBalancer:
+      mode: snat
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true

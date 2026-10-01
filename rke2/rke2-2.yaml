@@ -1,0 +1,27 @@
+
+#/etc/rancher/rke2/config.yaml 
+
+token: "ae996431ac73f5882beaf6376b268681b55a41af55b972b8e241e228b602992e"
+server: https://172.16.4.100:9345
+node-name: rke2-2
+node-ip: 172.17.0.34
+kubelet-arg:
+  - "node-ip=172.17.0.34"
+advertise-address: 172.16.0.35
+tls-san:
+  - 172.16.4.100
+  - 172.16.0.4
+  - 172.16.0.35
+  - 172.16.0.36
+  - 172.17.0.3
+  - 172.17.0.34
+  - 172.17.0.35
+cluster-cidr: 10.42.0.0/16
+service-cidr: 10.43.0.0/16
+cluster-dns: 10.43.0.10
+cluster-domain: cluster.local
+cni: cilium
+disable-kube-proxy: true
+write-kubeconfig-mode: "0644"
+disable:
+  - rke2-ingress-nginx
